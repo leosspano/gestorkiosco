@@ -1,0 +1,443 @@
+/* RESET DE ESTILOS GLOBALES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f0f4f8;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* BARRA SUPERIOR */
+.top-bar {
+    background-color: #0d47a1;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    height: 50px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 1.3rem;
+}
+
+.app-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.divider {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.page-title {
+    font-weight: 300;
+    font-size: 1rem;
+}
+
+.window-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.win-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+}
+
+.win-btn:hover {
+    opacity: 0.7;
+}
+
+/* MENÚ DE ACCIONES (TARJETAS SUPERIORES) */
+.action-menu {
+    background-color: #1565c0;
+    display: flex;
+    gap: 15px;
+    padding: 15px 25px;
+    overflow-x: auto;
+}
+
+.menu-card {
+    background-color: white;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 12px 25px;
+    min-width: 160px;
+    gap: 15px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+}
+
+.menu-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+}
+
+.card-icon {
+    font-size: 1.2rem;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Colores de íconos de la barra según diseño */
+.blue-icon { background-color: #e3f2fd; color: #0d47a1; }
+.light-blue-icon { background-color: #e0f7fa; color: #00838f; }
+.red-icon { background-color: #ffebee; color: #c62828; }
+.dark-blue-icon { background-color: #e8eaf6; color: #1a237e; }
+.cash-icon { background-color: #e8f5e9; color: #2e7d32; }
+.exit-icon { background-color: #efebe9; color: #4e342e; }
+
+.card-text {
+    font-weight: bold;
+    color: #1a237e;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+/* CONTENEDOR DE LA TABLA PRINCIPAL */
+.main-container {
+    flex: 1;
+    padding: 20px 25px;
+    overflow-y: auto;
+}
+
+.table-responsive {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    height: 100%;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: #f5f8fc;
+    color: #1a237e;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 16px 20px;
+    border-bottom: 2px solid #e3f2fd;
+    letter-spacing: 0.5px;
+}
+
+.data-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+/* Filas Seleccionadas */
+.data-table tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.data-table tbody tr:hover {
+    background-color: #fcfdfe;
+}
+
+.selected-row {
+    background-color: #e3f2fd !important;
+}
+
+/* ESTADOS VACÍOS (EMPTY STATE) */
+.empty-state-row td {
+    padding: 80px 0 !important;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+}
+
+.empty-box-img {
+    width: 70px;
+    opacity: 0.6;
+    margin-bottom: 10px;
+}
+
+.empty-state h3 {
+    color: #1a237e;
+    font-size: 1.2rem;
+}
+
+.empty-state p {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.inline-add-btn, .inline-stock-btn {
+    background-color: #0d47a1;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 6px rgba(13,71,161,0.2);
+}
+
+/* VENTANAS MODALES (EMERGENTES) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 12px;
+    width: 450px;
+    max-width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: hidden;
+    transform: translateY(-20px);
+    transition: transform 0.25s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    background-color: #0d47a1;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-form {
+    padding: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.modal-form label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #1a237e;
+}
+
+.modal-form input, .modal-form select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.modal-form input:focus, .modal-form select:focus {
+    border-color: #0d47a1;
+}
+
+.readonly-input {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.stock-warning {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.total-container {
+    background-color: #f1f8e9;
+    border: 1px dashed #8bc34a;
+    padding: 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.total-container span {
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: #33691e;
+}
+
+.total-price {
+    font-size: 1.3rem !important;
+    color: #2e7d32 !important;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-cancelar {
+    background-color: #f5f5f5;
+    color: #555;
+    border: 1px solid #ccc;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.btn-finalizar {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+/* BARRA INFERIOR DE ESTADO */
+.status-bar {
+    background-color: white;
+    border-top: 1px solid #e0e0e0;
+    padding: 8px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-right {
+    display: flex;
+    gap: 25px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-dot.connected {
+    background-color: #4caf50;
+    box-shadow: 0 0 6px #4caf50;
+}
+
+/* COMPONENTES DE DISEÑO EXCLUSIVOS DE LA PAGINA DE STOCK */
+.badge-category {
+    background-color: #e8eaf6;
+    color: #283593;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.75rem;
+}
+
+.code-column {
+    font-family: monospace;
+    font-weight: bold;
+    color: #0d47a1;
+}
+
+.price-column {
+    font-weight: 600;
+    color: #2e7d32;
+}
+
+.qty-column {
+    text-align: center;
+    width: 100px;
+}

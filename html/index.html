@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KioscOK 1.0.0 - Kiosco Principal</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="top-bar">
+        <div class="brand">
+            <i class="fa-solid fa-cart-shopping logo-icon"></i>
+            <span class="app-name">KioscOK 1.0.0</span>
+            <span class="divider">|</span>
+            <span class="page-title">Kiosco Principal</span>
+        </div>
+        <div class="window-controls">
+            <button class="win-btn"><i class="fa-solid fa-minus"></i></button>
+            <button class="win-btn"><i class="fa-regular fa-square"></i></button>
+            <button class="win-btn close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </header>
+
+    <nav class="action-menu">
+        <button id="btn-nuevo" class="menu-card">
+            <div class="card-icon blue-icon"><i class="fa-solid fa-plus"></i></div>
+            <span class="card-text">NUEVO</span>
+        </button>
+        <button id="btn-modificar" class="menu-card">
+            <div class="card-icon light-blue-icon"><i class="fa-solid fa-pencil"></i></div>
+            <span class="card-text">MODIFICAR</span>
+        </button>
+        <button id="btn-borrar" class="menu-card">
+            <div class="card-icon red-icon"><i class="fa-solid fa-trash-can"></i></div>
+            <span class="card-text">BORRAR</span>
+        </button>
+        <a href="stock.html" class="menu-card link-card">
+            <div class="card-icon dark-blue-icon"><i class="fa-solid fa-box-open"></i></div>
+            <span class="card-text">STOCK PRODUCTOS</span>
+        </a>
+        <button class="menu-card">
+            <div class="card-icon cash-icon"><i class="fa-solid fa-cash-register"></i></div>
+            <span class="card-text">CAJA</span>
+        </button>
+        <button class="menu-card">
+            <div class="card-icon exit-icon"><i class="fa-solid fa-door-open"></i></div>
+            <span class="card-text">SALIR</span>
+        </button>
+    </nav>
+
+    <main class="main-container">
+        <div class="table-responsive">
+            <table id="tabla-ventas" class="data-table">
+                <thead>
+                    <tr>
+                        <th>CÓDIGO PRODUCTO</th>
+                        <th>DESCRIPCIÓN PRODUCTO</th>
+                        <th>MARCA</th>
+                        <th>CATEGORÍA</th>
+                        <th>PRECIO</th>
+                        <th>CANTIDAD</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-ventas">
+                    <tr id="row-vacia" class="empty-state-row">
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png" alt="Caja vacía" class="empty-box-img">
+                                <h3>No hay ventas registradas</h3>
+                                <p>Comienza agregando una nueva venta desde el botón superior.</p>
+                                <button id="btn-agregar-inline" class="inline-add-btn"><i class="fa-solid fa-plus"></i> AGREGAR VENTA</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div id="modal-venta" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-cart-plus"></i> Registrar Nueva Venta</h2>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <form id="form-venta" class="modal-form">
+                <div class="form-group">
+                    <label for="buscar-producto">Seleccionar Producto:</label>
+                    <select id="buscar-producto" required>
+                        <option value="">-- Busque por Nombre, Código o Marca --</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Precio Unitario:</label>
+                        <input type="text" id="venta-precio-unitario" readonly class="readonly-input" placeholder="$ 0,00">
+                    </div>
+                    <div class="form-group">
+                        <label for="venta-cantidad">Cantidad a vender:</label>
+                        <input type="number" id="venta-cantidad" min="1" value="1" required>
+                    </div>
+                </div>
+
+                <div class="stock-warning" id="stock-aviso"></div>
+
+                <div class="total-container">
+                    <span>TOTAL ACUMULADO:</span>
+                    <span id="total-acumulado" class="total-price">$ 0,00</span>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancelar close-modal-btn">Cancelar</button>
+                    <button type="submit" class="btn-finalizar">Finalizar Venta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="status-bar">
+        <div class="status-item">
+            <i class="fa-solid fa-shop"></i>
+            <span>Kiosco Principal</span>
+        </div>
+        <div class="status-item">
+            <span>Usuario: <strong>Administrador</strong></span>
+        </div>
+        <div class="status-right">
+            <div class="status-item">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="txt-fecha">25/05/2026</span>
+            </div>
+            <div class="status-item">
+                <i class="fa-regular fa-clock"></i>
+                <span id="txt-hora">10:30</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot connected"></span>
+                <span>Conectado</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
