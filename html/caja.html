@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KioscOK 1.0.0 - Control de Caja Profesional</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .caja-layout { display: flex; gap: 20px; margin-top: 15px; }
+        .caja-main { flex: 3; display: flex; flex-direction: column; gap: 20px; }
+        .caja-sidebar { flex: 1; background: white; border-radius: 8px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); height: fit-content; }
+        .filter-bar { background: white; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+        .balance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .balance-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border-left: 5px solid #cbd5e1; }
+        .card-verde { border-left-color: #10b981; }
+        .card-rojo { border-left-color: #ef4444; }
+        .card-azul { border-left-color: #0288d1; }
+        .sidebar-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+        .info-list { list-style: none; padding: 0; margin: 0 0 20px 0; }
+        .info-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #f1f5f9; font-size: 0.9rem; color: #475569; }
+        .info-item strong { color: #0f172a; }
+        .btn-stack { display: flex; flex-direction: column; gap: 10px; }
+        .btn-caja-side { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: white; transition: background 0.2s; }
+        .btn-ingreso { background-color: #10b981; }
+        .btn-egreso { background-color: #ef4444; }
+        .btn-action-top { padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; display: inline-flex; align-items: center; gap: 8px; }
+        .badge-status-caja { font-weight: bold; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; }
+        .terminal-modal { background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; max-height: 300px; overflow-y: auto; }
+        .log-entry { border-bottom: 1px solid #1e293b; padding: 5px 0; }
+    </style>
+</head>
+<body>
+
+    <header class="top-bar">
+        <div class="brand">
+            <i class="fa-solid fa-cash-register logo-icon"></i>
+            <span class="app-name">KioscOK 1.0.0</span>
+            <span class="divider">|</span>
+            <span class="page-title">CAJA</span>
+        </div>
+        <div class="window-controls">
+            <a href="index.html" style="color:white; text-decoration:none; margin-right:15px; font-size:0.9rem; font-weight:bold;"><i class="fa-solid fa-arrow-left"></i> Volver a Ventas</a>
+        </div>
+    </header>
+
+    <main class="main-container">
+        
+        <section class="filter-bar">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <label for="fecha-jornada" style="font-weight:bold; color:#334155;"><i class="fa-solid fa-calendar"></i> Fecha Jornada:</label>
+                <input type="date" id="fecha-jornada" style="padding:6px 10px; border-radius:6px; border:1px solid #cbd5e1; font-weight:600;">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button id="btn-abrir-caja" class="btn-action-top" style="background:#10b981;"><i class="fa-solid fa-lock-open"></i> Abrir Caja</button>
+                <button id="btn-cerrar-caja" class="btn-action-top" style="background:#64748b;"><i class="fa-solid fa-lock"></i> Cerrar Caja</button>
+                <button id="btn-logs-caja" class="btn-action-top" style="background:#475569;"><i class="fa-solid fa-shield-halved"></i> Logs Caja</button>
+            </div>
+        </section>
+
+        <section class="balance-grid" style="margin-top: 15px;">
+            <div class="balance-card card-azul">
+                <span style="color:#64748b; font-size:0.85rem; font-weight:bold;">VENTAS REALIZADAS</span>
+                <h2 id="lbl-cant-ventas-card">0 operaciones</h2>
+            </div>
+            <div class="balance-card card-verde">
+                <span style="color:#64748b; font-size:0.85rem; font-weight:bold;">TOTAL COBRADO</span>
+                <h2 id="lbl-total-cobrado">$ 0,00</h2>
+            </div>
+            <div class="balance-card card-azul">
+                <span style="color:#64748b; font-size:0.85rem; font-weight:bold;">SALDO ACTUAL</span>
+                <h2 id="lbl-saldo-actual-card">$ 0,00</h2>
+            </div>
+            <div class="balance-card" id="card-estado-borde">
+                <span style="color:#64748b; font-size:0.85rem; font-weight:bold;">ESTADO DE LA CAJA</span>
+                <div style="margin-top:8px;"><span id="badge-estado-texto" class="badge-status-caja">CERRADA</span></div>
+            </div>
+        </section>
+
+        <div class="caja-layout">
+            <div class="caja-main">
+                <div class="table-responsive" style="background: white; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>HORA</th>
+                                <th>TIPO</th>
+                                <th>DESCRIPCIÓN</th>
+                                <th>FORMA DE PAGO</th>
+                                <th style="text-align: right;">MONTO</th>
+                                <th style="text-align: center;">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-movimientos"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <aside class="caja-sidebar">
+                <div class="sidebar-title"><i class="fa-solid fa-circle-info"></i> Información de Caja</div>
+                <ul class="info-list">
+                    <li class="info-item">Hora Apertura: <strong id="side-hora-apertura">--:--</strong></li>
+                    <li class="info-item">Cajero Asignado: <strong id="side-cajero">Ninguno</strong></li>
+                    <li class="info-item">Cantidad Ventas: <strong id="side-cant-ventas">0</strong></li>
+                    <li class="info-item">Saldo Acumulado: <strong id="side-saldo-actual" style="color:#0288d1;">$ 0,00</strong></li>
+                    <li class="info-item">Estado actual: <strong id="side-estado-texto">Inactivo</strong></li>
+                </ul>
+
+                <div class="sidebar-title"><i class="fa-solid fa-cash-register"></i> Acciones Rápidas</div>
+                <div class="btn-stack">
+                    <button id="btn-registrar-ingreso" class="btn-caja-side btn-ingreso"><i class="fa-solid fa-plus"></i> Registrar Ingreso</button>
+                    <button id="btn-registrar-egreso" class="btn-caja-side btn-egreso"><i class="fa-solid fa-minus"></i> Registrar Egreso</button>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <div id="modal-flujo" class="modal-overlay" style="display: none; align-items: center; justify-content: center;">
+        <div class="modal-content" style="max-width: 400px; width: 90%;">
+            <div class="modal-header" id="flujo-header">
+                <h2 id="flujo-titulo">Movimiento Manual</h2>
+                <button type="button" class="close-modal-btn" id="btn-cerrar-flujo">&times;</button>
+            </div>
+            <form id="form-flujo" class="modal-form">
+                <input type="hidden" id="flujo-tipo">
+                <input type="hidden" id="flujo-id-edit">
+                
+                <div class="form-group">
+                    <label for="flujo-monto">Monto ($):</label>
+                    <input type="number" id="flujo-monto" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="flujo-motivo">Motivo / Descripción:</label>
+                    <input type="text" id="flujo-motivo" required placeholder="Escriba el motivo detallado...">
+                </div>
+                <div class="form-group">
+                    <label>Forma de Pago:</label>
+                    <div style="display: flex; gap: 15px; margin-top: 5px;">
+                        <label><input type="radio" name="flujo-pago" value="Efectivo" checked> Efectivo</label>
+                        <label><input type="radio" name="flujo-pago" value="Transferencia"> Transferencia</label>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancelar" id="btn-cancelar-flujo">Cancelar</button>
+                    <button type="submit" class="btn-finalizar">Guardar Transacción</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-logs" class="modal-overlay" style="display: none; align-items: center; justify-content: center;">
+        <div class="modal-content" style="max-width: 600px; width: 95%;">
+            <div class="modal-header" style="background: #475569;">
+                <h2><i class="fa-solid fa-terminal"></i> Logs Caja - Historial de Cambios</h2>
+                <button type="button" class="close-modal-btn" id="btn-cerrar-logs">&times;</button>
+            </div>
+            <div style="padding: 15px;">
+                <div class="terminal-modal" id="box-auditoria-logs"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="status-bar">
+        <div class="status-item"><i class="fa-solid fa-user"></i> Administrador</div>
+        <div class="status-right">
+            <div class="status-item"><i class="fa-regular fa-clock"></i> <span id="footer-hora">--:--</span></div>
+        </div>
+    </footer>
+
+    <script src="../js/caja.js"></script>
+</body>
+</html>
